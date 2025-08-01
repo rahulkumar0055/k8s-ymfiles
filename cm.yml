@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongocm
+data:
+  mongouser: mongodb
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongosc
+type: Opaque
+stringData:
+  mongopass: mongo@123

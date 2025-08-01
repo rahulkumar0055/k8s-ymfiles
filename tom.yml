@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tom-deployment
+spec:
+  replicas: 1  # You can change the number of replicas as needed
+  selector:
+    matchLabels:
+      app: tom
+  template:
+    metadata:
+      labels:
+        app: tom
+    spec:
+      containers:
+      - name: tom-container
+        image: tomcat:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: tom-config-volume
+          mountPath: /usr/local/tomcat/conf/tomcat-users.xml
+          subPath: tomcat-user
+      volumes:
+      - name: tom-config-volume
+        configMap:
+          name: tom-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tom-service
+spec:
+  selector:
+    app: tom
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort  # Change to NodePort or ClusterIP as needed          

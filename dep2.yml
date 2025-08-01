@@ -1,0 +1,81 @@
+# PostgreSQL Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres-container
+        image: postgres:14
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: myuser
+        - name: POSTGRES_PASSWORD
+          value: mypassword
+---
+# PostgreSQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP
+---
+# Your Multi-App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multi-app
+  template:
+    metadata:
+      labels:
+        app: multi-app
+    spec:
+      containers:
+      - name: multi-app-container
+        image: rahulkumar9536/multi_app:latest
+        ports:
+        - containerPort: 5000   # Update if different
+        env:
+        - name: DB_HOST
+          value: postgres-service
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: myuser
+        - name: DB_PASSWORD
+          value: mypassword
+---
+# Service to expose your app
+apiVersion: v1
+kind: Service
+metadata:
+  name: multi-app-service
+spec:
+  selector:
+    app: multi-app
+  ports:
+  - port: 80
+    targetPort: 5000   # Match with containerPort above
+  type: NodePort

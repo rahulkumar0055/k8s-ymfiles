@@ -1,0 +1,10 @@
+{
+  "auths": {
+    "https://index.docker.io/v1/": {
+      "username": "rahulkumar9536",
+      "password": "dckr_pat_hbF0b78f8mX-dTpOsRE-KtTov0I",
+      "email": "rahulkumarnv332@gmail.com",
+      "auth": "cmFodWxrdW1hcjk1MzY6ZGNrcl9wYXRfaGJGMGI3OGY4bVgtZFRwT3NSRS1LdFRvdjBJ"
+    }
+  }
+}
