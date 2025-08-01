@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: spring-deployment
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: springapp
@@ -13,6 +13,11 @@ spec:
       labels:
         app: springapp
     spec:
+      tolerations:
+      - key: abc
+        effect: NoSchedule
+        operator: Equal
+        value: xyz
       containers:
       - name: spring-container
         image: sanchitraj5/docker-sp:1
